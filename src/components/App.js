@@ -10,6 +10,11 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import api from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import ProtectedRoute from "./ProtectedRoute";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Register from "./Register";
+import Login from "./Login";
+import authApi from "../utils/authApi";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState("");
@@ -25,6 +30,10 @@ function App() {
   });
 
   const [cards, setCards] = React.useState([]);
+
+  const [loggedIn, setLoggedIn] = React.useState(false);
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     api
@@ -119,11 +128,67 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  const handleRegister = (data) => {
+    authApi
+      .registerNewUser(data)
+      .then(() => {
+        navigate("/sign-in");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleLogin = (data) => {
+    authApi
+      .login(data)
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        setLoggedIn(true);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    setLoggedIn(false);
+    navigate("/sign-in");
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header />
-
-      <Main
+      <Routes>
+        <Route
+          path="/sign-up"
+          element={<Register handleRegister={handleRegister} />}
+        ></Route>
+        <Route
+          path="/sign-in"
+          element={<Login handleLogin={handleLogin} />}
+        ></Route>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute
+              path="/"
+              element={<Main />}
+              loggedIn={loggedIn}
+              cards={cards}
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+            />
+          }
+        />
+      </Routes>
+      {/* <Main
         cards={cards}
         onEditAvatar={handleEditAvatarClick}
         onEditProfile={handleEditProfileClick}
@@ -131,7 +196,7 @@ function App() {
         onCardClick={handleCardClick}
         onCardLike={handleCardLike}
         onCardDelete={handleCardDelete}
-      />
+      /> */}
 
       <Footer />
 
