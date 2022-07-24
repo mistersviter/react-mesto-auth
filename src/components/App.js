@@ -175,7 +175,7 @@ function App() {
           element={
             <ProtectedRoute
               path="/"
-              element={<Main />}
+              element={Main}
               loggedIn={loggedIn}
               cards={cards}
               onEditAvatar={handleEditAvatarClick}
@@ -188,17 +188,8 @@ function App() {
           }
         />
       </Routes>
-      {/* <Main
-        cards={cards}
-        onEditAvatar={handleEditAvatarClick}
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onCardClick={handleCardClick}
-        onCardLike={handleCardLike}
-        onCardDelete={handleCardDelete}
-      /> */}
 
-      <Footer />
+      {loggedIn && <Footer />}
 
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
