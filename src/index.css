@@ -52,3 +52,7 @@
 @import url(./blocks/entrance-form/__input/entrance-form__input.css);
 @import url(./blocks/entrance-form/__submit-button/entrance-form__submit-button.css);
 @import url(./blocks/register/__clue/register__clue.css);
+@import url(./blocks/header/__controls/header__controls.css);
+@import url(./blocks/header/__user-info/header__user-info.css);
+@import url(./blocks/header/__button/header__button.css);
+@import url(./blocks/header/__button/_logged-out/header__button_logged-out.css);

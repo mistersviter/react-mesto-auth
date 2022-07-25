@@ -33,6 +33,8 @@ function App() {
 
   const [loggedIn, setLoggedIn] = React.useState(false);
 
+  const [email, setEmail] = React.useState("");
+
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -129,6 +131,7 @@ function App() {
   }
 
   const handleRegister = (data) => {
+    console.log("sup");
     authApi
       .registerNewUser(data)
       .then(() => {
@@ -145,6 +148,7 @@ function App() {
       .then((res) => {
         localStorage.setItem("jwt", res.token);
         setLoggedIn(true);
+        setEmail(data.email);
         navigate("/");
       })
       .catch((err) => {
@@ -152,7 +156,7 @@ function App() {
       });
   };
 
-  const handleLogout = () => {
+  const handleLogOut = () => {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
     navigate("/sign-in");
@@ -160,7 +164,7 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header />
+      <Header email={email} handleLogOut={handleLogOut} />
       <Routes>
         <Route
           path="/sign-up"
