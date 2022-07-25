@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../index.css";
 import Header from "./Header";
 import Main from "./Main";
@@ -18,29 +18,27 @@ import InfoToolTip from "./InfoToolTip";
 import authApi from "../utils/authApi";
 
 function App() {
-  const [currentUser, setCurrentUser] = React.useState("");
+  const [currentUser, setCurrentUser] = useState("");
 
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = React.useState(false);
-  const [isRegistrationSucces, setIsRegistrationSucces] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
+  const [isRegistrationSucces, setIsRegistrationSucces] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({
     name: "",
     link: "",
   });
 
-  const [cards, setCards] = React.useState([]);
+  const [cards, setCards] = useState([]);
 
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = useState("");
 
   const goTo = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     api
       .getInitialCards()
       .then((cardsData) => {
@@ -49,7 +47,7 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api
       .getUserInfo()
       .then((res) => {
@@ -58,7 +56,7 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
       authApi
@@ -178,6 +176,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        setIsInfoToolTipOpen(true);
       });
   };
 

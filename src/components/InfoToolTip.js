@@ -34,7 +34,7 @@ function InfoToolTip(props) {
           type="button"
           className="popup__close-button"
           onClick={props.onClose}
-        ></button>
+        />
       </div>
     </div>
   );
