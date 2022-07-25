@@ -14,6 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
+import InfoToolTip from "./InfoToolTip";
 import authApi from "../utils/authApi";
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
     React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = React.useState(false);
+  const [isRegistrationSucces, setIsRegistrationSucces] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({
     name: "",
     link: "",
@@ -35,7 +38,7 @@ function App() {
 
   const [email, setEmail] = React.useState("");
 
-  const navigate = useNavigate();
+  const goTo = useNavigate();
 
   React.useEffect(() => {
     api
@@ -63,13 +66,13 @@ function App() {
         .then((res) => {
           setEmail(res.data.email);
           setLoggedIn(true);
-          navigate("/");
+          goTo("/");
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      navigate("/sign-in");
+      goTo("/sign-in");
     }
   }, []);
 
@@ -93,6 +96,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsInfoToolTipOpen(false);
     setSelectedCard({ name: "", link: "" });
   }
 
@@ -149,14 +153,17 @@ function App() {
   }
 
   const handleRegister = (data) => {
-    console.log("sup");
     authApi
       .registerNewUser(data)
       .then(() => {
-        navigate("/sign-in");
+        goTo("/sign-in");
+        setIsRegistrationSucces(true);
+        setIsInfoToolTipOpen(true);
       })
       .catch((err) => {
         console.log(err);
+        setIsRegistrationSucces(false);
+        setIsInfoToolTipOpen(true);
       });
   };
 
@@ -167,7 +174,7 @@ function App() {
         localStorage.setItem("jwt", res.token);
         setLoggedIn(true);
         setEmail(data.email);
-        navigate("/");
+        goTo("/");
       })
       .catch((err) => {
         console.log(err);
@@ -177,7 +184,7 @@ function App() {
   const handleLogOut = () => {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
-    navigate("/sign-in");
+    goTo("/sign-in");
   };
 
   return (
@@ -238,6 +245,12 @@ function App() {
         onClose={closeAllPopups}
       />
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+      <InfoToolTip
+        isOpen={isInfoToolTipOpen}
+        isRegistrationSucces={isRegistrationSucces}
+        onClose={closeAllPopups}
+      />
     </CurrentUserContext.Provider>
   );
 }

@@ -56,3 +56,5 @@
 @import url(./blocks/header/__user-info/header__user-info.css);
 @import url(./blocks/header/__button/header__button.css);
 @import url(./blocks/header/__button/_logged-out/header__button_logged-out.css);
+@import url(./blocks/popup/__registration-image/popup__registration-image.css);
+@import url(./blocks/popup/__registration-text/popup__registration-text.css);

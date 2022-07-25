@@ -16,7 +16,7 @@ function Header(props) {
               <p className="header__user-info">{props.email}</p>
               <button
                 className="header__button header__button_logged-out"
-                onClick={props.handleLogout}
+                onClick={props.handleLogOut}
               >
                 Выйти
               </button>
